@@ -107,40 +107,56 @@ function umspay_woocommerce_init()
             $_SESSION['response_status'] = "<div class='alert alert-danger' style='padding: 15px; margin-bottom: 20px; border: 1px solid #d9534f; border-radius: 4px; color: #a94442; background-color: #f2dede;'> Please fill the api key</div>";
             $_SESSION['response_status_expire'] = time() + 5;
           } else {
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-              CURLOPT_URL => 'https://api.umeskiasoftwares.com/api/v1/intiatestk',
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_ENCODING => '',
-              CURLOPT_MAXREDIRS => 10,
-              CURLOPT_TIMEOUT => 0,
-              CURLOPT_FOLLOWLOCATION => true,
-              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-              CURLOPT_CUSTOMREQUEST => 'POST',
-              CURLOPT_POSTFIELDS => json_encode([
-                'api_key' => $apikey,
-                'email' => $owneremail,
-                'amount' => $amount,
-                'msisdn' => $phonenumber,
-                'reference' => $order
-              ]),
-              CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/json'
-              ),
-            ));
-           $response = curl_exec($curl);
-            curl_close($curl);
-            $data = json_decode($response, true);
-            if (isset($data['success']) && $data['success'] == '200') {
-              //UPDATE ORDER STATUS TO PROCESSING
-              $order = wc_get_order($order);
-              $order->update_status('processing', __('Order processing by admin', 'woocommerce'));
-              $this->check_payment_status($order_id);
-              //TAKE TO CHECKOUT PAGE
-            } else {
-              $error = $data['errorMessage'];
-              $_SESSION['response_status'] = "<div class='alert alert-danger' style='padding: 15px; margin-bottom: 20px; border: 1px solid #d9534f; border-radius: 4px; color: #a94442; background-color: #f2dede;'>" . "Payment Failed. Please try again later. Error:  $error" . "</div>";
+            if ($owneremail == '') {
+              $_SESSION['response_status'] = "<div class='alert alert-danger' style='padding: 15px; margin-bottom: 20px; border: 1px solid #d9534f; border-radius: 4px; color: #a94442; background-color: #f2dede;'> Please fill the owner email</div>";
               $_SESSION['response_status_expire'] = time() + 5;
+            } else {
+              if ($phonenumber == '') {
+                $_SESSION['response_status'] = "<div class='alert alert-danger' style='padding: 15px; margin-bottom: 20px; border: 1px solid #d9534f; border-radius: 4px; color: #a94442; background-color: #f2dede;'> Please fill the phone number</div>";
+                $_SESSION['response_status_expire'] = time() + 5;
+              } else {
+                if ($amount == '') {
+                  $_SESSION['response_status'] = "<div class='alert alert-danger' style='padding: 15px; margin-bottom: 20px; border: 1px solid #d9534f; border-radius: 4px; color: #a94442; background-color: #f2dede;'> Please fill the amount</div>";
+                  $_SESSION['response_status_expire'] = time() + 5;
+                } else {
+
+                  $curl = curl_init();
+                  curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'https://api.umeskiasoftwares.com/api/v1/intiatestk',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => json_encode([
+                      'api_key' => $apikey,
+                      'email' => $owneremail,
+                      'amount' => $amount,
+                      'msisdn' => $phonenumber,
+                      'reference' => $order
+                    ]),
+                    CURLOPT_HTTPHEADER => array(
+                      'Content-Type: application/json'
+                    ),
+                  ));
+                  $response = curl_exec($curl);
+                  curl_close($curl);
+                  $data = json_decode($response, true);
+                  if (isset($data['success']) && $data['success'] == '200') {
+                    //UPDATE ORDER STATUS TO PROCESSING
+                    $order = wc_get_order($order);
+                    $order->update_status('processing', __('Order processing by admin', 'woocommerce'));
+                    $this->check_payment_status($order_id);
+                    //TAKE TO CHECKOUT PAGE
+                  } else {
+                    $error = $data['errorMessage'];
+                    $_SESSION['response_status'] = "<div class='alert alert-danger' style='padding: 15px; margin-bottom: 20px; border: 1px solid #d9534f; border-radius: 4px; color: #a94442; background-color: #f2dede;'>" . "Payment Failed. Please try again later. Error:  $error" . "</div>";
+                    $_SESSION['response_status_expire'] = time() + 5;
+                  }
+                }
+              }
             }
           }
         }
@@ -158,31 +174,42 @@ function umspay_woocommerce_init()
 ?>
         <style>
           .formpayment {
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
             font-size: 16px;
-            line-height: 1.5;
+            line-height: 1.6;
           }
 
           .formpayment input[type="text"] {
             display: block;
-            width: 100%;
+            width: calc(100% - 20px);
             padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid black;
-            border-radius: 2px;
+            margin-bottom: 15px;
+            border-radius: 4px;
             box-sizing: border-box;
             font-size: 16px;
             line-height: 1.5;
+            transition: border-color 0.3s ease;
           }
+
 
           .btn-data {
             display: flex;
             justify-content: space-between;
-            width: 50%;
+            width: 100%;
+            margin-top: 20px;
           }
+
+          .btn-data button {
+            padding: 10px 15px;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+          }
+
         </style>
         <form method="POST" action="#" class="formpayment">
 
@@ -239,7 +266,7 @@ function umspay_woocommerce_init()
           // UPDATE TRANCTION ID
           $order->set_transaction_id($TransactionReceipt);
           $order->save();
-        }else{
+        } else {
           $TransactionReference = $callbackContent->TransactionReference;
           //COMPLETE ORDER
           $order = wc_get_order($TransactionReference);
@@ -329,7 +356,7 @@ function umspay_woocommerce_init()
 
               'data-copy' => true
 
-              )
+            )
           ),
 
         );
