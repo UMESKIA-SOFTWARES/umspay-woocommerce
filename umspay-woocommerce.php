@@ -104,7 +104,7 @@ function umspay_woocommerce_init()
           $order = $_POST['order'];
           $owneremail = $_POST['owneremail'];
           if ($apikey == '') {
-            $_SESSION['response_status'] = "<div class='alert alert-danger'> Please fill the api key</div>";
+            $_SESSION['response_status'] = "<div class='alert alert-danger' style='padding: 15px; margin-bottom: 20px; border: 1px solid #d9534f; border-radius: 4px; color: #a94442; background-color: #f2dede;'> Please fill the api key</div>";
             $_SESSION['response_status_expire'] = time() + 5;
           } else {
             $curl = curl_init();
