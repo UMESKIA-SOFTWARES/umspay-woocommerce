@@ -45,7 +45,6 @@ function umspay_woocommerce_init()
         $this->title = $this->get_option('title');
         $this->description = $this->get_option('description');
         $this->enabled = $this->get_option('enabled');
-        $this->instructions = $this->get_option('instructions', $this->description);
         //SESSION DATA 
         $_SESSION['apikey']   = $this->get_option('apikey');
         $_SESSION['owneremail']   = $this->get_option('owneremail');
@@ -300,26 +299,38 @@ function umspay_woocommerce_init()
 
             'description' => __('Get your API Key from your UmsPay Account.', 'umspay-woocommerce')
           ),
-          'instructions' => array(
-            'title' => __('Instructions', 'umspay-woocommerce'),
-
-            'type' => 'textarea',
-
-            'description' => __('Instructions that will be added to the thank you page.', 'umspay-woocommerce'),
-
-            'default' => __('Pay via UmsPay; peyment is processed securely via UmsPay.', 'umspay-woocommerce'),
-
-            'desc_tip' => true
-          ),
           'owneremail' => array(
             'title' => __('Owner Email', 'umspay-woocommerce'),
 
             'type' => 'text',
 
+            'default'     => __('', 'umspay-woocommerce'),
+
             'desc_tip' => true,
 
             'description' => __('Get your Owner Email from your UmsPay Account.', 'umspay-woocommerce')
-          )
+          ),
+          'webhook' => array(
+            'title' => __('Webhook', 'umspay-woocommerce'),
+
+            'type' => 'text',
+
+            'default'     => __($_SESSION['webhook'], 'umspay-woocommerce'),
+
+            'desc_tip' => true,
+
+            'description' => __('This is the url where you will update on your Ums Portal account', 'umspay-woocommerce'),
+
+            'custom_attributes' => array(
+              
+              'onfocus' => 'this.select()',
+
+              'readonly' => 'readonly',
+
+              'data-copy' => true
+
+              )
+          ),
 
         );
       }
