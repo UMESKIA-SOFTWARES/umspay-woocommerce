@@ -51,7 +51,7 @@ function umspay_woocommerce_init()
         //GET WEBSITE URL
         $_SESSION['webhook'] = get_site_url() . '/wc-api/wc_umspay_gateway/';
         //Finally, you need to add a save hook for your settings:
-        add_action('woocommerce_update_options_payment_gateways\_' . $this->id, array($this, 'process_admin_options'));
+        add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
         add_action('woocommerce_receipt_umspay', array($this, 'receipt_page'));
         // You can also register a webhook here
         add_action('woocommerce_api_wc_umspay_gateway', array($this, 'webhook'));
@@ -322,7 +322,7 @@ function umspay_woocommerce_init()
             'description' => __('This is the url where you will update on your Ums Portal account', 'umspay-woocommerce'),
 
             'custom_attributes' => array(
-              
+
               'onfocus' => 'this.select()',
 
               'readonly' => 'readonly',
