@@ -2,31 +2,21 @@
 85 77 83 32 80 65 89 
 ```
 
-## Tinpesa Wordpress Plugin
+## Ums Pay Wordpress Plugin
 
 This is a plugin that allows you to integrate your wordpress site with tinpesa payment gateway.
 
 ## Installation
 
-1. Buy the plugin from [here](https://shop.umeskiasoftwares.com/product/tinypesa-woocommerce/).
+1. Download zip and Upload the plugin to your wordpress site.
 
-2. Upload the plugin to your wordpress site.
+2. Activate the plugin.
 
-3. Activate the plugin.
+3. Go to the plugin settings page and enter your tinpesa credentials.
 
-4. Go to the plugin settings page and enter your tinpesa credentials.
+4. Save the settings.
 
-5. Save the settings.
-
-6. You are good to go.
-
-## Usage
-
-1. Create a new page and add the shortcode `[tinpesa_payment_form]` to the page content.
-
-2. Publish the page.
-
-3. You can now access the page and make payments.
+5. You are good to go.
 
 ## License
 
